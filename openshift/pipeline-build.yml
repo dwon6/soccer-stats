@@ -12,7 +12,7 @@ items:
     source:
       git:
         ref: master
-        uri: https://github.com/ricardozanini/soccer-stats.git
+        uri: https://github.com/dwon6/soccer-stats.git
       type: Git
     strategy:
       type: JenkinsPipeline
