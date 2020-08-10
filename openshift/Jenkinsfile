@@ -12,7 +12,7 @@ pipeline {
          stage('Build') {
             agent { label 'maven' }
             steps {
-                git url: 'https://github.com/ricardozanini/soccer-stats.git'
+                git url: 'https://github.com/dwon6/soccer-stats.git'
                 script {
                     pom = readMavenPom file: 'pom.xml'
                     sh "mvn -B versions:set -DnewVersion=${pom.version}-${BUILD_NUMBER}"
