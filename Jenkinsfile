@@ -85,7 +85,7 @@ if(FULL_BUILD) {
                 credentialsId: 'nexus', 
                 groupId: "${pom.groupId}", 
                 nexusUrl: NEXUS_URL, 
-                nexusVersion: 'nexus3', 
+                nexusVersion: 'nexus2', 
                 protocol: 'http', 
                 repository: 'ansible-meetup', 
                 version: "${pom.version}"        
