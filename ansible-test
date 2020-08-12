@@ -28,10 +28,10 @@ stage('Deploy') {
             installation: 'ansible',
             inventory: 'provision/inventory.ini', 
             playbook: 'provision/playbook.yml', 
-                       
+            remote_user: "jenkins"
             become: yes
             //become_method: sudo
-            becomeUser: "jenkins"
+            //becomeUser: "jenkins"
             //you must specify your own ids
          }
     }
