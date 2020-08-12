@@ -8,19 +8,19 @@ final HOST_PROVISION = params.HOST_PROVISION
 final GIT_URL = 'https://github.com/dwon6/soccer-stats.git'
 final NEXUS_URL = 'nexus.local:8081'
 
-stage('Build') {
-    node {
-        git GIT_URL
-        withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
-            if(FULL_BUILD) {
-                def pom = readMavenPom file: 'pom.xml'
-                sh "mvn -B versions:set -DnewVersion=${pom.version}-${BUILD_NUMBER}"
-                sh "mvn -B -Dmaven.test.skip=true clean package"
-                stash name: "artifact", includes: "target/soccer-stats-*.war"
-            }
-        }
-    }
-}
+//stage('Build') {
+//    node {
+//        git GIT_URL
+//        withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
+//            if(FULL_BUILD) {
+//                def pom = readMavenPom file: 'pom.xml'
+//                sh "mvn -B versions:set -DnewVersion=${pom.version}-${BUILD_NUMBER}"
+//                sh "mvn -B -Dmaven.test.skip=true clean package"
+//                stash name: "artifact", includes: "target/soccer-stats-*.war"
+//           }
+//        }
+//    }
+//}
 
 if(FULL_BUILD) {
     stage('Unit Tests') {   
@@ -67,7 +67,7 @@ if(FULL_BUILD) {
 }
 
 
-//if(FULL_BUILD) {
+if(FULL_BUILD) {
     stage('Artifact Upload') {
         node {
            // unstash "artifact"
@@ -91,7 +91,7 @@ if(FULL_BUILD) {
                 version: "${pom.version}"        
         }
     }
-//}
+}
 
 
 stage('Deploy') {
