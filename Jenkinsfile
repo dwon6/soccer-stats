@@ -38,3 +38,20 @@ stage('Integration Tests') {
   }
 }
 
+stage('Static Analysis') {
+   node {
+          withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
+          withSonarQubeEnv('sonar'){
+              unstash "it_tests"
+              unstash "unit_tests"
+              sh 'mvn sonar:sonar -DskipTests'
+         }
+      }
+  }
+}
+
+stage('Approval') {
+   timeout(time:3, unit:'DAYS') {
+          input 'Do I have your approval for deployment?'
+    }
+}
