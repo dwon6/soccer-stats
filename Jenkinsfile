@@ -49,8 +49,8 @@ if(FULL_BUILD) {
          node {
             withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
                 withSonarQubeEnv('sonar'){
-                    unstash "it_tests"
-                    unstash "unit_tests"
+                //    unstash "it_tests"
+                //    unstash "unit_tests"
                     sh 'mvn sonar:sonar -DskipTests'
                 }
             }
@@ -70,7 +70,7 @@ if(FULL_BUILD) {
 //if(FULL_BUILD) {
     stage('Artifact Upload') {
         node {
-            unstash "artifact"
+           // unstash "artifact"
 
             def pom = readMavenPom file: 'pom.xml'
             def file = "${pom.artifactId}-${pom.version}"
