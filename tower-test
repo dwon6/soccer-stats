@@ -18,7 +18,7 @@ stage('Deploy') {
         ansibleTower(
                 towerServer: 'tower',
                 templateType: 'job',
-                jobTemplate: '7',
+                jobTemplate: 'Soccer-Stat',
                 importTowerLogs: true,
                 inventory: '2',
                 removeColor: false,
