@@ -45,7 +45,7 @@ stage('Build') {
 //}
 
 //if(FULL_BUILD) {
-    stage('Static Analysis') {
+//    stage('Static Analysis') {
    //     node {
    //         withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
    //             withSonarQubeEnv('sonar'){
@@ -53,13 +53,27 @@ stage('Build') {
    //                 unstash 'unit_tests'
                     //sh 'mvn sonar:sonar -DskipTests'
    //                 sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-                    sh 'mvn sonar:sonar \
-  -Dsonar.projectKey=sonar \
-  -Dsonar.host.url=http://sonar.local:9000 \
-  -Dsonar.login=815be340c7b8c78f0aeca85110ab9b918b81ab45'
+  //                  sh 'mvn sonar:sonar \
+ // -Dsonar.projectKey=sonar \
+ // -Dsonar.host.url=http://sonar.local:9000 \
+ // -Dsonar.login=815be340c7b8c78f0aeca85110ab9b918b81ab45'
         //        }
       //      }
     //    }
+ //   }
+//}
+
+//if(FULL_BUILD) {
+    stage('Static Analysis') {
+        node {
+            withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
+                withSonarQubeEnv(credentialsId: '815be340c7b8c78f0aeca85110ab9b918b81ab45', installationName: 'sonar.local'){
+                    unstash 'it_tests'
+                    unstash 'unit_tests'
+                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+                  }
+            }
+        }
     }
 //}
 
