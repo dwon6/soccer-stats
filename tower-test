@@ -90,7 +90,7 @@ stage('Deploy') {
 //            version = sh script: 'xmllint metadata.xml --xpath "string(//latest)"',
 //                         returnStdout: true
         }
-        def artifactUrl = "http://${NEXUS_URL}/repository/maven-releases/${repoPath}/${version}/${pom.artifactId}-${version}.war"
+        def artifactUrl = "http://${NEXUS_URL}/repository/maven-releases/br/com/meetup/ansible/soccer-stats/${version}/${pom.artifactId}-${version}.war"
         def hostLimit = (HOST_PROVISION == "all" || HOST_PROVISION == null) ? "" : HOST_PROVISION
         
         //you must specify your own ids
