@@ -87,7 +87,7 @@ if(FULL_BUILD) {
                 nexusUrl: NEXUS_URL, 
                 nexusVersion: 'nexus3', 
                 protocol: 'http', 
-                repository: 'maven-public', 
+                repository: 'maven-releases', 
                 version: "${pom.version}"        
         }
     }
@@ -103,11 +103,11 @@ stage('Deploy') {
         def version = pom.version
 
         if(!FULL_BUILD) { //takes the last version from repo
-            sh "curl -o metadata.xml -s http://${NEXUS_URL}/repository/maven-public/${repoPath}/maven-metadata.xml"
+            sh "curl -o metadata.xml -s http://${NEXUS_URL}/repository/maven-releases/${repoPath}/maven-metadata.xml"
             version = sh script: 'xmllint metadata.xml --xpath "string(//latest)"',
                          returnStdout: true
         }
-        def artifactUrl = "http://${NEXUS_URL}/repository/maven-public/${repoPath}/${version}/${pom.artifactId}-${version}.war"
+        def artifactUrl = "http://${NEXUS_URL}/repository/maven-releases/${repoPath}/${version}/${pom.artifactId}-${version}.war"
 
         withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=${pom.artifactId}"]) {
             echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
