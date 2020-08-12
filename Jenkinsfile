@@ -76,3 +76,36 @@ stage('Artifact Upload') {
                 version: "${pom.version}"        
     }
 }
+
+stage('Deploy') {
+    node {
+        def pom = readMavenPom file: "pom.xml"
+        def repoPath =  "${pom.groupId}".replace(".", "/") + 
+                        "/${pom.artifactId}"
+
+        def version = pom.version
+
+           sh "curl -o metadata.xml -s http://${NEXUS_URL}/repository/maven-releases/${repoPath}/maven-metadata.xml"
+           version = sh script: 'xmllint metadata.xml --xpath "string(//latest)"',
+                        returnStdout: true
+
+        def artifactUrl = "http://${NEXUS_URL}/repository/maven-releases/${repoPath}/${version}/${pom.artifactId}-${version}.war"
+
+        withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=${pom.artifactId}"]) {
+            echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
+
+            // install galaxy roles
+            sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
+
+            ansiblePlaybook colorized: true, 
+            credentialsId: 'ssh-jenkins',
+            limit: "${HOST_PROVISION}",
+            installation: 'ansible',
+            inventory: 'provision/inventory.ini', 
+            playbook: 'provision/playbook.yml', 
+            //sudo: true,
+            become: yes,
+            //sudoUser: 'jenkins'
+        }
+    }
+}
