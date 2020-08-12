@@ -49,9 +49,9 @@ if(FULL_BUILD) {
          node {
             withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
                 withSonarQubeEnv('sonar'){
-                  //  unstash 'it_tests'
-                  //  unstash 'unit_tests'
-                     sh 'mvn sonar:sonar -DskipTests'
+                    unstash 'it_tests'
+                    unstash 'unit_tests'
+                    sh 'mvn sonar:sonar -DskipTests'
                 }
             }
         }
