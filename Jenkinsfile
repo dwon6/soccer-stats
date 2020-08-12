@@ -8,19 +8,19 @@ final HOST_PROVISION = params.HOST_PROVISION
 final GIT_URL = 'https://github.com/dwon6/soccer-stats.git'
 final NEXUS_URL = 'nexus.local:8081'
 
-//stage('Build') {
-//    node {
-//        git GIT_URL
-//        withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
-//            if(FULL_BUILD) {
-//                def pom = readMavenPom file: 'pom.xml'
-//                sh "mvn -B versions:set -DnewVersion=${pom.version}-${BUILD_NUMBER}"
-//                sh "mvn -B -Dmaven.test.skip=true clean package"
-//                stash name: "artifact", includes: "target/soccer-stats-*.war"
-//           }
-//        }
-//    }
-//}
+stage('Build') {
+    node {
+        git GIT_URL
+        withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
+           // if(FULL_BUILD) {
+                def pom = readMavenPom file: 'pom.xml'
+                sh "mvn -B versions:set -DnewVersion=${pom.version}-${BUILD_NUMBER}"
+                sh "mvn -B -Dmaven.test.skip=true clean package"
+                stash name: "artifact", includes: "target/soccer-stats-*.war"
+          // }
+        }
+    }
+}
 
 if(FULL_BUILD) {
     stage('Unit Tests') {   
@@ -49,8 +49,8 @@ if(FULL_BUILD) {
          node {
             withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
                 withSonarQubeEnv('sonar'){
-                //    unstash "it_tests"
-                //    unstash "unit_tests"
+                    unstash "it_tests"
+                    unstash "unit_tests"
                     sh 'mvn sonar:sonar -DskipTests'
                 }
             }
@@ -70,7 +70,7 @@ if(FULL_BUILD) {
 if(FULL_BUILD) {
     stage('Artifact Upload') {
         node {
-           // unstash "artifact"
+            unstash "artifact"
 
             def pom = readMavenPom file: 'pom.xml'
             def file = "${pom.artifactId}-${pom.version}"
@@ -103,9 +103,9 @@ stage('Deploy') {
         def version = pom.version
 
  //       if(!FULL_BUILD) { //takes the last version from repo
- //           sh "curl -o metadata.xml -s http://${NEXUS_URL}/repository/maven-releases/${repoPath}/maven-metadata.xml"
- //           version = sh script: 'xmllint metadata.xml --xpath "string(//latest)"',
- //                        returnStdout: true
+            sh "curl -o metadata.xml -s http://${NEXUS_URL}/repository/maven-releases/${repoPath}/maven-metadata.xml"
+            version = sh script: 'xmllint metadata.xml --xpath "string(//latest)"',
+                         returnStdout: true
   //      }
         def artifactUrl = "http://${NEXUS_URL}/repository/maven-releases/${repoPath}/${version}/${pom.artifactId}-${version}.war"
 
