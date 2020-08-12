@@ -123,7 +123,7 @@ stage('Deploy') {
             playbook: 'provision/playbook.yml', 
             //sudo: true,
             become: yes,
-            sudoUser: 'jenkins'
+            //sudoUser: 'jenkins'
         }
     }
 }
