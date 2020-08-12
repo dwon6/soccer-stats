@@ -1,4 +1,4 @@
-#!groovy​
+#!groovy
 
 // FULL_BUILD -> true/false build parameter to define if we need to run the entire stack for lab purpose only
 final FULL_BUILD = params.FULL_BUILD
@@ -12,12 +12,12 @@ stage('Build') {
     node {
         git GIT_URL
         withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
-            if(FULL_BUILD) {
+           // if(FULL_BUILD) {
                 def pom = readMavenPom file: 'pom.xml'
                 sh "mvn -B versions:set -DnewVersion=${pom.version}-${BUILD_NUMBER}"
                 sh "mvn -B -Dmaven.test.skip=true clean package"
                 stash name: "artifact", includes: "target/soccer-stats-*.war"
-            }
+          //  }
         }
     }
 }
