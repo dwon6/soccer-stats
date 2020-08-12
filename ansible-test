@@ -43,7 +43,7 @@ stage('Deploy') {
            
             
             become: true
-            becomeUser: "jenkins"
+            //becomeUser: "jenkins"
         }
     }
 }
