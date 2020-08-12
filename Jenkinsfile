@@ -22,7 +22,7 @@ stage('Build') {
     }
 }
 
-if(FULL_BUILD) {
+//if(FULL_BUILD) {
     stage('Unit Tests') {   
         node {
             withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
@@ -31,9 +31,9 @@ if(FULL_BUILD) {
             }
         }
     }
-}
+//}
 
-if(FULL_BUILD) {
+//if(FULL_BUILD) {
     stage('Integration Tests') {
         node {
             withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
@@ -42,9 +42,9 @@ if(FULL_BUILD) {
             }
         }
     }
-}
+//}
 
-if(FULL_BUILD) {
+//if(FULL_BUILD) {
     stage('Static Analysis') {
         node {
             withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
@@ -60,18 +60,18 @@ if(FULL_BUILD) {
             }
         }
     }
-}
+//}
 
-if(FULL_BUILD) {
+//if(FULL_BUILD) {
     stage('Approval') {
         timeout(time:3, unit:'DAYS') {
             input 'Do I have your approval for deployment?'
         }
     }
-}
+//}
 
 
-if(FULL_BUILD) {
+//if(FULL_BUILD) {
     stage('Artifact Upload') {
         node {
             unstash 'artifact'
@@ -95,7 +95,7 @@ if(FULL_BUILD) {
                 version: "${pom.version}"        
         }
     }
-}
+//}
 
 
 stage('Deploy') {
