@@ -98,14 +98,14 @@ stage('Deploy') {
             sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
             ansiblePlaybook colorized: true, 
             credentialsId: 'ssh-jenkins',
-            limit: "${HOST_PROVISION}",
+            //limit: "${HOST_PROVISION}",
             installation: 'ansible',
             inventory: 'provision/inventory.ini', 
             playbook: 'provision/playbook.yml', 
            // sudo: true,
            // sudoUser: 'jenkins'         
-            become: true
-            becomeUser: "jenkins"
+            become: yes
+            become_user: "jenkins"
         }
     }
 }
