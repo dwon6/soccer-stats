@@ -24,7 +24,7 @@ stage('Deploy') {
           //  sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
           //  ansiblePlaybook colorized: true, 
           //  credentialsId: 'ssh-jenkins',
-            
+          //  limit: "${HOST_PROVISION}"
           //  installation: 'ansible',
           //  inventory: 'provision/playbook.yml', 
           //  playbook: 'provision/playbook.yml', 
@@ -38,6 +38,7 @@ stage('Deploy') {
                 templateType: 'job',
                 jobTemplate: '7',
                 importTowerLogs: true,
+                limit: "${HOST_PROVISION}"
                 inventory: '2',
                 removeColor: false,
                 verbose: true,
