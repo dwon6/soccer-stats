@@ -67,12 +67,12 @@
 - name: "start spring-boot service"
   service: name='{{ spring_boot_application_id }}' state=restarted
 
-- name: "wait for application to come up"
-  uri:
+#- name: "wait for application to come up"
+#  uri:
     #url: "http://127.0.0.1:{{spring_boot_http_port}}/"
-    url: "http://app.local:{{spring_boot_http_port}}/"
-    status_code: '200,404'
-  register: result
-  until: (result.status == 200) or (result.status == 404)
-  retries: 10
-  delay: 10
+#    url: "http://app.local:{{spring_boot_http_port}}/"
+#    status_code: '200,404'
+#  register: result
+#  until: (result.status == 200) or (result.status == 404)
+#  retries: 10
+#  delay: 10
