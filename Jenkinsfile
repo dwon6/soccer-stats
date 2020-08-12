@@ -58,13 +58,13 @@ stage('Build') {
     }
 //}
 
-if(FULL_BUILD) {
+//if(FULL_BUILD) {
     stage('Approval') {
         timeout(time:3, unit:'DAYS') {
             input 'Do I have your approval for deployment?'
         }
     }
-}
+//}
 
 
 //if(FULL_BUILD) {
