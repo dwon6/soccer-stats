@@ -20,11 +20,11 @@ stage('Deploy') {
                 templateType: 'job',
                 jobTemplate: 'Soccer-Stat',
                 importTowerLogs: true,
-                inventory: '2',
+                inventory: 'soccer-stat',
                 removeColor: false,
                 verbose: true,
-                credential: '2',  
-                limit: "${hostLimit}",
+                credential: 'jenkins',  
+ //               limit: "${hostLimit}",
                 extraVars: """---
 ARTIFACT_URL:  "${artifactUrl}"
 APP_NAME: "${pom.artifactId}" 
