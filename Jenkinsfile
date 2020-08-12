@@ -124,6 +124,6 @@ stage('Deploy') {
             //sudo: true,
             become: yes,
             //sudoUser: 'jenkins'
-//        }
+        }
     }
 }
