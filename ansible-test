@@ -29,9 +29,9 @@ stage('Deploy') {
             inventory: 'provision/inventory.ini', 
             playbook: 'provision/playbook.yml', 
                        
-            become: true
+            become: yes
             //become_method: sudo
-            //becomeUser: "jenkins"
+            becomeUser: "jenkins"
             //you must specify your own ids
          }
     }
