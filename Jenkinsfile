@@ -51,7 +51,11 @@ if(FULL_BUILD) {
                 withSonarQubeEnv('sonar'){
                     unstash 'it_tests'
                     unstash 'unit_tests'
-                    sh 'mvn sonar:sonar -DskipTests'
+                    //sh 'mvn sonar:sonar -DskipTests'
+                    sh 'mvn sonar:sonar \
+  -Dsonar.projectKey=sonar \
+  -Dsonar.host.url=http://sonar.local:9000 \
+  -Dsonar.login=815be340c7b8c78f0aeca85110ab9b918b81ab45'
                 }
             }
         }
