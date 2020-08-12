@@ -43,7 +43,7 @@ stage('Deploy') {
                        
             become: true
             become_method: sudo
-            //becomeUser: "jenkins"
+            becomeUser: "jenkins"
         }
     }
 }
