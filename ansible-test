@@ -21,32 +21,18 @@ stage('Deploy') {
             echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
             
             // install galaxy roles
-          //  sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
-          //  ansiblePlaybook colorized: true, 
-          //  credentialsId: 'ssh-jenkins',
-          //  limit: "${HOST_PROVISION}"
-          //  installation: 'ansible',
-          //  inventory: 'provision/playbook.yml', 
-          //  playbook: 'provision/playbook.yml', 
+            sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
+            ansiblePlaybook colorized: true, 
+            credentialsId: 'ssh-jenkins',
+            limit: "${HOST_PROVISION}"
+            installation: 'ansible',
+            inventory: 'provision/playbook.yml', 
+            playbook: 'provision/playbook.yml', 
                        
-          //  become: true
-           // become_method: sudo
-          //  becomeUser: "jenkins"
+           become: true
+          // become_method: sudo
+           becomeUser: "jenkins"
             //you must specify your own ids
-        ansibleTower(
-                towerServer: 'tower',
-                templateType: 'job',
-                jobTemplate: '7',
-                importTowerLogs: true,
-                limit: "${HOST_PROVISION}"
-                inventory: '2',
-                removeColor: false,
-                verbose: true,
-                credential: '2',  
-                extraVars: """---
-                ARTIFACT_URL:  "${artifactUrl}"
-                APP_NAME: "${pom.artifactId}" 
-                """
-        }
+         }
     }
 }
