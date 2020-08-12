@@ -22,7 +22,7 @@ stage('Build') {
     }
 }
 
-//if(FULL_BUILD) {
+if(FULL_BUILD) {
     stage('Unit Tests') {   
         node {
             withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
@@ -31,9 +31,9 @@ stage('Build') {
             }
         }
     }
-//}
+}
 
-//if(FULL_BUILD) {
+if(FULL_BUILD) {
     stage('Integration Tests') {
         node {
             withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
@@ -42,7 +42,7 @@ stage('Build') {
             }
         }
     }
-//}
+}
 
 //if(FULL_BUILD) {
 //    stage('Static Analysis') {
