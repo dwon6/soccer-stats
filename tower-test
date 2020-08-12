@@ -122,7 +122,7 @@ stage('Deploy') {
                 inventory: '9',
                 removeColor: false,
                 verbose: true,
-                credential: '3',  
+                credential: '2',  
                 limit: "${hostLimit}",
                 extraVars: """---
 ARTIFACT_URL:  "${artifactUrl}"
