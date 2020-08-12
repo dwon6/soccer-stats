@@ -1,3 +1,13 @@
+#!groovy
+
+// FULL_BUILD -> true/false build parameter to define if we need to run the entire stack for lab purpose only
+final FULL_BUILD = params.FULL_BUILD
+// HOST_PROVISION -> server to run ansible based on provision/inventory.ini
+final HOST_PROVISION = params.HOST_PROVISION
+
+final GIT_URL = 'https://github.com/dwon6/soccer-stats.git'
+final NEXUS_URL = 'nexus.local:8081'
+
 stage('Deploy') {
     node {
         def pom = readMavenPom file: "pom.xml"
