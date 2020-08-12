@@ -49,8 +49,8 @@ if(FULL_BUILD) {
          node {
             withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
                 withSonarQubeEnv('sonar'){
-                    unstash 'it_tests'
-                    unstash 'unit_tests'
+                  //  unstash 'it_tests'
+                  //  unstash 'unit_tests'
                      sh 'mvn sonar:sonar -DskipTests'
    //                 sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
   //                  sh 'mvn sonar:sonar \
