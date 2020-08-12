@@ -63,19 +63,15 @@ if(FULL_BUILD) {
  //   }
 //}
 
-//if(FULL_BUILD) {
-    stage('Static Analysis') {
-        node {
-            withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
-                withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonar'){
-                    unstash 'it_tests'
-                    unstash 'unit_tests'
-                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-                  }
-            }
-        }
-    }
-//}
+   stage('Static Analysis') {
+    node {
+         withSonarQubeEnv('sonar'){
+   //       unstash 'it_tests'
+   //       unstash 'unit_tests'
+        sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+       }
+     }
+   }
 
 //if(FULL_BUILD) {
     stage('Approval') {
