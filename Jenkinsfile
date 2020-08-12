@@ -21,3 +21,107 @@ stage('Build') {
         }
     }
 }
+
+//if(FULL_BUILD) {
+    stage('Unit Tests') {   
+        node {
+            withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
+                sh "mvn -B clean test"
+                stash name: "unit_tests", includes: "target/surefire-reports/**"
+            }
+        }
+    }
+//}
+
+//if(FULL_BUILD) {
+    stage('Integration Tests') {
+        node {
+            withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
+                sh "mvn -B clean verify -Dsurefire.skip=true"
+                stash name: "it_tests", includes: 'target/failsafe-reports/**'
+            }
+        }
+    }
+//}
+
+// if(FULL_BUILD) {
+    stage('Static Analysis') {
+         node {
+            withEnv(["PATH+MAVEN=${tool 'm3'}/bin"]) {
+                withSonarQubeEnv('sonar'){
+                    unstash "it_tests"
+                    unstash "unit_tests"
+                    sh 'mvn sonar:sonar -DskipTests'
+                }
+            }
+        }
+    }
+//}
+
+//if(FULL_BUILD) {
+    stage('Approval') {
+        timeout(time:3, unit:'DAYS') {
+            input 'Do I have your approval for deployment?'
+        }
+    }
+//}
+
+//if(FULL_BUILD) {
+    stage('Artifact Upload') {
+        node {
+            unstash "artifact"
+
+            def pom = readMavenPom file: 'pom.xml'
+            def file = "${pom.artifactId}-${pom.version}"
+            def jar = "target/${file}.war"
+
+            sh "cp pom.xml ${file}.pom"
+
+            nexusArtifactUploader artifacts: [
+                    [artifactId: "${pom.artifactId}", classifier: '', file: "target/${file}.war", type: 'war'],
+                    [artifactId: "${pom.artifactId}", classifier: '', file: "${file}.pom", type: 'pom']
+                ], 
+                credentialsId: 'nexus', 
+                groupId: "${pom.groupId}", 
+                nexusUrl: NEXUS_URL, 
+                nexusVersion: 'nexus3', 
+                protocol: 'http', 
+                repository: 'maven-releases', 
+                version: "${pom.version}"        
+        }
+    }
+//}
+
+stage('Deploy') {
+    node {
+        def pom = readMavenPom file: "pom.xml"
+        def repoPath =  "${pom.groupId}".replace(".", "/") + 
+                        "/${pom.artifactId}"
+
+        def version = pom.version
+
+ //       if(!FULL_BUILD) { //takes the last version from repo
+ //           sh "curl -o metadata.xml -s http://${NEXUS_URL}/repository/maven-releases/${repoPath}/maven-metadata.xml"
+ //           version = sh script: 'xmllint metadata.xml --xpath "string(//latest)"',
+ //                        returnStdout: true
+  //      }
+        def artifactUrl = "http://${NEXUS_URL}/repository/maven-releases/${repoPath}/${version}/${pom.artifactId}-${version}.war"
+
+        withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=${pom.artifactId}"]) {
+            echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
+
+            // install galaxy roles
+            sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
+
+            ansiblePlaybook colorized: true, 
+            credentialsId: 'ssh-jenkins',
+            limit: "${HOST_PROVISION}",
+            installation: 'ansible',
+            inventory: 'provision/inventory.ini', 
+            playbook: 'provision/playbook.yml', 
+            //sudo: true,
+            become: yes,
+            //sudoUser: 'jenkins'
+        }
+    }
+}
