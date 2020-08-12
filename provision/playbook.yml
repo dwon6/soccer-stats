@@ -11,7 +11,7 @@
 - name: Install Java
   hosts: app_server
   become: yes
-  become_user: root
+  #become_user: root
   roles:
     - geerlingguy.java
 
@@ -28,7 +28,7 @@
 - name: Setup Spring Boot
   hosts: app_server
   become: yes
-  become_user: root
+  #become_user: root
   roles: 
     - { role: pellepelster.springboot-role,
         spring_boot_file: "{{ APP_NAME }}.war",
