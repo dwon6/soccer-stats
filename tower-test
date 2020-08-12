@@ -1,0 +1,34 @@
+stage('Deploy') {
+    node {
+        def pom = readMavenPom file: "pom.xml"
+        def repoPath =  "${pom.groupId}".replace(".", "/") + 
+                        "/${pom.artifactId}"
+
+        def version = pom.version
+
+//        if(!FULL_BUILD) { //takes the last version from repo
+//            sh "curl -o metadata.xml -s http://${NEXUS_URL}/repository/${NEXUS_REPO}/${repoPath}/maven-metadata.xml"
+//            version = sh script: 'xmllint metadata.xml --xpath "string(//latest)"',
+//                         returnStdout: true
+        }
+        def artifactUrl = "http://${NEXUS_URL}/repository/${NEXUS_REPO}/${repoPath}/${version}/${pom.artifactId}-${version}.war"
+        def hostLimit = (HOST_PROVISION == "all" || HOST_PROVISION == null) ? "" : HOST_PROVISION
+        
+        //you must specify your own ids
+        ansibleTower(
+                towerServer: 'tower',
+                templateType: 'job',
+                jobTemplate: '7',
+                importTowerLogs: true,
+                inventory: '2',
+                removeColor: false,
+                verbose: true,
+                credential: '2',  
+                limit: "${hostLimit}",
+                extraVars: """---
+ARTIFACT_URL:  "${artifactUrl}"
+APP_NAME: "${pom.artifactId}" 
+"""
+        )
+    }
+}
