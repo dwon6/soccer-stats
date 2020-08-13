@@ -3,7 +3,9 @@
 // FULL_BUILD -> true/false build parameter to define if we need to run the entire stack for lab purpose only
 final FULL_BUILD = params.FULL_BUILD
 
+# Forked git URL
 final GIT_URL = 'https://github.com/dwon6/soccer-stats.git'
+
 final NEXUS_URL = 'nexus.local:8081'
 final NEXUS_REPO = 'maven-releases'
 
