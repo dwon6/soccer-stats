@@ -117,12 +117,12 @@ stage('Deploy') {
         ansibleTower(
                 towerServer: 'tower',
                 templateType: 'job',
-                jobTemplate: '7',
+                jobTemplate: '9',
                 importTowerLogs: true,
                 inventory: '2',
                 removeColor: false,
                 verbose: true,
-                credential: '2',  
+                credential: '3',  
                 limit: "${hostLimit}",
                 extraVars: """---
 ARTIFACT_URL:  "${artifactUrl}"
